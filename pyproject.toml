@@ -1,0 +1,11 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+module = "declaratively"
+author = "Glyph"
+author-email = "glyph@twistedmatrix.com"
+home-page = "https://github.com/glyph/Declaratively"
+classifiers = ["License :: OSI Approved :: MIT License"]
+description-file = "README.md"
