@@ -8,3 +8,7 @@ only contain fixed information specified by a programmer.
 
 (At present the state of the code could charitably be described as
 "experimental".)
+
+You can read a little more about this here: https://glyph.twistedmatrix.com/2021/12/declaratively.html
+
+I've set up this repository just as a sketch, to see if there is interest.  If you'd like to see a more productionized (i.e.: tested) version of this, please feel free to contribute!
