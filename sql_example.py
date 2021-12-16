@@ -17,3 +17,8 @@ def main():
     print((list(load_by_bar.run(cur, bar=3))))
 
 main()
+
+def on_the_fly():
+    ad_hoc = d.declare("select * from foo")
+
+on_the_fly()

@@ -4,13 +4,26 @@ Enforced declarative specification of module-level code objects.
 
 from __future__ import annotations
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar, List, Sequence, Callable, MutableMapping, Tuple, Optional, Iterator
 
 import inspect
+
+
+class AlreadyDeclared(Exception):
+    """
+    The namespace already had a declaration scope applied.
+    """
+
+
+class DeclarationsFinished(Exception):
+    """
+    Once the scope is done, you can't declare more stuff.
+    """
+
 
 DeclaredType = TypeVar("DeclaredType")
 SpecifiedType = TypeVar("SpecifiedType")
@@ -24,8 +37,11 @@ class Declarer(Generic[SpecifiedType, DeclaredType, NamespaceType]):
     namespace: str
     _namespaceObject: NamespaceType
     _declarations: List[Tuple[SpecifiedType, DeclaredType]]
+    _closed: bool = False
 
     def declare(self, specification: SpecifiedType) -> DeclaredType:
+        if self._closed:
+            raise DeclarationsFinished()
         declaration = self._collection._specificationToDeclaration(
             self.namespace, self._namespaceObject, specification
         )
@@ -38,12 +54,6 @@ class _NamespaceRecord(Generic[NamespaceType, SpecifiedType, DeclaredType]):
     _namespace: str
     _namespaceObject: NamespaceType
     _declarations: Sequence[Tuple[SpecifiedType, DeclaredType]]
-
-
-class AlreadyDeclared(Exception):
-    """
-    The namespace already had a declaration applied.
-    """
 
 
 @dataclass
@@ -76,3 +86,4 @@ class DeclarationCollection(Generic[NamespaceType, SpecifiedType, DeclaredType])
         )
         declarer = Declarer(self, namespace, group, declarations)
         yield declarer
+        declarer._closed = True
